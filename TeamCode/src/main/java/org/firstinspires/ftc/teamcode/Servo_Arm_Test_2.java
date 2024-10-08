@@ -10,7 +10,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.checkerframework.checker.units.qual.C;
+import org.firstinspires.ftc.teamcode.excutil.EncodedPath;
+import org.firstinspires.ftc.teamcode.excutil.ExcMath;
+import org.firstinspires.ftc.teamcode.excutil.ExcPaths;
 import org.firstinspires.ftc.teamcode.excutil.Input;
 import org.firstinspires.ftc.teamcode.excutil.coroutines.CoroutineManager;
 import org.firstinspires.ftc.teamcode.excutil.coroutines.CoroutineResult;
@@ -26,7 +28,7 @@ public class Servo_Arm_Test_2 extends OpMode {
         public static final float BACK_CLAW_RELEASE = 0.49f;
     }
 
-    private DcMotor front_left  = null;
+    private static DcMotor front_left  = null;
     private DcMotor front_right = null;
     private DcMotor back_left   = null;
     private DcMotor back_right  = null;
@@ -58,8 +60,23 @@ public class Servo_Arm_Test_2 extends OpMode {
 
     Servo[] servosToTest;
 
+    private static EncodedPath path;
+
+    static {
+        ExcPaths.start()
+                .until((p) -> {
+                    if (p.firstTick()) {
+                        front_left.setTargetPosition(700);
+                    }
+                    return ExcMath.approxEquals(front_left.getCurrentPosition(), 700, 20);
+                })
+                .until();
+    }
+
     @Override
     public void init() {
+
+
 
         front_left   = getMotor("front_left");
         front_right  = getMotor("front_right");
